@@ -11,7 +11,7 @@ import java.util.Properties;
 public class Menu extends JFrame {
     private static JPanel imagePanel = new JPanel();
 
-    Menu() {
+    Menu() throws IOException {
         super("Крестики нолики");
         setSize(500, 375);
         setResizable(false);
@@ -48,16 +48,7 @@ public class Menu extends JFrame {
 
         setContentPane(imagePanel);
 
-        buttonPlay.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    playGame();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+        buttonPlay.addActionListener(playGame());
 
         buttonRule.addActionListener(new Rule());
 
@@ -71,31 +62,21 @@ public class Menu extends JFrame {
         });
     }
 
-    private void playGame() throws IOException {
-        int sounds = 100;
-        int game = 1;
-        int players = 2;
-        Properties prop = new Properties();
-        try {
-            prop.load(new InputStreamReader(new FileInputStream("econfig/settings.ini"), "UTF-8"));
-            sounds = Integer.parseInt(prop.getProperty("sounds"));
-            game = Integer.parseInt(prop.getProperty("game"));
-            players = Integer.parseInt(prop.getProperty("players"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    private GameInterf playGame() throws IOException {
+        GetSettings getSettings = new GetSettings();
+        int game = getSettings.getGame();
+        int players = getSettings.getPlayer();
         if (game == 0) {
             if (players == 2) {
-                Game_3x3_2_Players playGame = new Game_3x3_2_Players(sounds);
+               return new Game_3x3_2_Players();
             } else {
-                Game_3x3_AI playGame = new Game_3x3_AI(sounds);
+                return new Game_3x3_AI();
             }
         } else {
             if (players == 2) {
-                Game_Infinity_2_Players playGame = new Game_Infinity_2_Players(sounds);
-            } else {
-                Game_Infinity_AI playGame = new Game_Infinity_AI(sounds);
+                return new Game_Infinity_2_Players();
             }
         }
+         return new Game_Infinity_AI();
     }
 }

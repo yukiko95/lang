@@ -58,8 +58,8 @@ public class Settings extends JFrame implements ActionListener {
 
                 Box box = Box.createVerticalBox();
                 ButtonGroup bg = new ButtonGroup();
-                JRadioButton rButtonGame1 = new JRadioButton("3*3");
-                JRadioButton rButtonGame2 = new JRadioButton("Бесконечное поле", true);
+                JRadioButton rButtonGame1 = new JRadioButton("3*3", true);
+                JRadioButton rButtonGame2 = new JRadioButton("Бесконечное поле");
                 bg.add(rButtonGame1);
                 bg.add(rButtonGame2);
                 box.add(rButtonGame1);
