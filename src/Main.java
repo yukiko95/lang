@@ -1,3 +1,7 @@
+/**
+ * Created by darya on 1.05.14.
+ */
+
 import javax.swing.*;
 
 public class Main {

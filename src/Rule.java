@@ -1,3 +1,7 @@
+/**
+ * Created by darya on 1.05.14.
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,26 +17,32 @@ public class Rule extends JFrame implements ActionListener {
             public void run() {
                 ruleFrame = new JFrame("Правила");
                 setDefaultCloseOperation(EXIT_ON_CLOSE);
-                ruleFrame.setSize(300, 180);
+                ruleFrame.setSize(300, 220);
                 ruleFrame.setLocationRelativeTo(null);
                 ruleFrame.setResizable(false);
                 ruleFrame.setVisible(true);
-                ruleFrame.setLayout(new FlowLayout());
+                ruleFrame.setLayout(null);
 
-                JLabel text = new JLabel("Реальное поле имеет размер \n" +
-                                               "20*20 клеток, но для игры \n" +
-                                               "это равносильно бесконечности. \n" +
-                                               "Цель игры - построить непрерывный \n" +
-                                               "ряд из 5 крестиков (ноликов) \n" +
-                                               "по горизонтали, вертикали или диагонали. \n" +
-                                               "Первый ход всегда предоставляется \n" +
-                                               "человеку.");
-                text.setForeground(Color.CYAN);
+                JLabel text = new JLabel("<html><font face=’verdana’ size = 3>" +
+                                               "Реальное поле имеет размер " +
+                                               "20*20 клеток, но для игры " +
+                                               "это равносильно бесконечности. " +
+                                               "Цель игры - построить непрерывный " +
+                                               "ряд из 5 крестиков (ноликов), если это бесконечная игра " +
+                                               "и ряд из 3 крестиков (ноликов), если это игра 3*3 " +
+                                               "по горизонтали, вертикали или диагонали. " +
+                                               "Первый ход всегда предоставляется " +
+                                               "человеку.</html>");
+
+                text.setBackground(new Color(230, 230, 250));
+                text.setSize(280,170);
+                text.setLocation(10,10);
 
                 JButton ok = new JButton("Ok");
+                ok.setSize(70,30);
+                ok.setLocation(115, 185);
 
                 ruleFrame.add(text);
-                ruleFrame.add(new JSeparator());
                 ruleFrame.add(ok);
 
 
