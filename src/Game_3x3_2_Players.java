@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 /**
@@ -23,12 +25,31 @@ public class Game_3x3_2_Players extends JFrame implements ActionListener, GameIn
     public void actionPerformed(ActionEvent e) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                mainFrame.setSize(300, 200);
+                mainFrame.setSize(150, 150);
                 mainFrame.setResizable(false);
                 mainFrame.setLocationRelativeTo(null);
-                mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                mainFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
                 mainFrame.setLayout(new BorderLayout());
+                mainFrame.setVisible(true);
                 new Game();
+
+                mainFrame.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowOpened(WindowEvent e) {
+                        Menu.getFrames()[0].setEnabled(false);
+                    }
+
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        Menu.getFrames()[0].setEnabled(true);
+                    }
+
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        Menu.getFrames()[0].setEnabled(true);
+                    }
+                });
+
             }
         });
 
@@ -38,12 +59,11 @@ public class Game_3x3_2_Players extends JFrame implements ActionListener, GameIn
         Game() {
             JPanel centerPanel = new JPanel();
             centerPanel.setLayout(new GridLayout(SIZE, SIZE));
-            mainFrame.add(centerPanel, "Center");
+            mainFrame.add(centerPanel, BorderLayout.CENTER);
 
-            backToMenuButton = new JButton();
-            backToMenuButton.setSize(15, 25);
+            backToMenuButton = new JButton("working!!");
             backToMenuButton.addActionListener(this);
-            mainFrame.add(backToMenuButton, "North");
+            mainFrame.add(backToMenuButton, BorderLayout.NORTH);
 
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
@@ -70,7 +90,7 @@ public class Game_3x3_2_Players extends JFrame implements ActionListener, GameIn
                     if (theButton == matrixButtons[i][j]) {
                         theButton.setText(whoseTurn());
                         theButton.setEnabled(false);
-                        emptyCells--;
+                        emptyCells -= 1;
                         checkVin();
                     }
                 }
@@ -80,43 +100,60 @@ public class Game_3x3_2_Players extends JFrame implements ActionListener, GameIn
 
     @Override
     public String whoseTurn() {
-        if (emptyCells != 0) {
-            if (emptyCells % 2 == 0) {
-                return name2;
-            }
+        if (emptyCells != 0 && emptyCells % 2 == 0) {
+            return "O";
         }
-        return name1;
+        return "X";
     }
 
     @Override
     public void checkVin() {
         for (int i = 0; i < SIZE; i++) {
-            if (matrixButtons[i][0].getText().equals(matrixButtons[i][1].getText()) &&
-                    matrixButtons[i][1].getText().equals(matrixButtons[i][2].getText()) &&
-                    matrixButtons[i][1].getText() != null) {
-                showMessage(matrixButtons[i][0]);
+            if (matrixButtons[i][0].getText().equals("")) {
+                continue;
             }
-            if (matrixButtons[0][i].getText().equals(matrixButtons[1][i].getText()) &&
-                    matrixButtons[1][i].getText().equals(matrixButtons[2][i].getText()) &&
-                    matrixButtons[1][i].getText() != null) {
+            boolean check = true;
+            for (int j = 1; j < SIZE; j++) {
+                if (!matrixButtons[i][j - 1].getText().equals(matrixButtons[i][j].getText())) {
+                    check = false;
+                    break;
+                }
+            }
+            if (check) {
+                showMessage(matrixButtons[i][0]);
+                vin = true;
+                break;
+            }
+            if (i == 0 || matrixButtons[0][i].getText().equals("")) {
+                continue;
+            }
+            check = true;
+            for (int j = 0; j < SIZE; j++) {
+                if (!matrixButtons[j][i - 1].getText().equals(matrixButtons[j][i].getText())) {
+                    check = false;
+                    break;
+                }
+            }
+            if (check) {
                 showMessage(matrixButtons[0][i]);
                 vin = true;
+                break;
             }
-            if (matrixButtons[0][0].getText().equals(matrixButtons[1][1].getText()) &&
-                    matrixButtons[1][1].getText().equals(matrixButtons[2][2].getText()) &&
-                    matrixButtons[0][0].getText() != null) {
-                showMessage(matrixButtons[0][0]);
-                vin = true;
-            }
-            if (matrixButtons[0][2].getText().equals(matrixButtons[1][1].getText()) &&
-                    matrixButtons[1][1].getText().equals(matrixButtons[2][0].getText()) &&
-                    matrixButtons[0][2].getText() != null) {
-                showMessage(matrixButtons[0][2]);
-                vin = true;
-            }
-            if (emptyCells == 0 && !vin) {
-                JOptionPane.showMessageDialog(this, "Ничья", "Итог", JOptionPane.DEFAULT_OPTION);
-            }
+        }
+        if (matrixButtons[0][0].getText().equals(matrixButtons[1][1].getText()) &&
+                matrixButtons[1][1].getText().equals(matrixButtons[2][2].getText()) &&
+                !matrixButtons[0][0].getText().equals("")) {
+            showMessage(matrixButtons[0][0]);
+            vin = true;
+        }
+        if (matrixButtons[0][2].getText().equals(matrixButtons[1][1].getText()) &&
+                matrixButtons[1][1].getText().equals(matrixButtons[2][0].getText()) &&
+                !matrixButtons[0][2].getText().equals("")) {
+            showMessage(matrixButtons[0][2]);
+            vin = true;
+        }
+        if (!vin && emptyCells == 0) {
+            JOptionPane.showMessageDialog(this, "Ничья", "Итог", JOptionPane.DEFAULT_OPTION);
         }
     }
 

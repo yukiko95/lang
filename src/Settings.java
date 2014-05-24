@@ -17,8 +17,8 @@ public class Settings extends JFrame implements ActionListener {
     private JFrame settingsFrame;
     private JLabel numberLabel;
     private int sounds = 100;
-    private int game = 1;
-    private int player = 2;
+    private int game = 0;
+    private int players = 2;
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -29,20 +29,13 @@ public class Settings extends JFrame implements ActionListener {
                 settingsFrame.setLocationRelativeTo(null);
                 settingsFrame.setResizable(false);
                 settingsFrame.setVisible(true);
-                settingsFrame.setSize(300, 235);
                 settingsFrame.setLayout(new FlowLayout(FlowLayout.CENTER));
 
                 final JSlider soundSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
-                soundSlider.setSize(100, 30);
-                soundSlider.setLocation(90, 50);
 
                 JLabel soundLabel = new JLabel("Звуки");
-                soundLabel.setSize(50, 30);
-                soundLabel.setLocation(30, 50);
 
                 numberLabel = new JLabel("100");
-                numberLabel.setSize(30, 30);
-                numberLabel.setLocation(150, 50);
 
                 settingsFrame.add(soundLabel);
                 settingsFrame.add(soundSlider);
@@ -64,8 +57,6 @@ public class Settings extends JFrame implements ActionListener {
                 bg.add(rButtonGame2);
                 box.add(rButtonGame1);
                 box.add(rButtonGame2);
-                box.setSize(140, 60);
-//                box.setLocation(60, 60);
                 settingsFrame.add(box);
                 settingsFrame.add(new JSeparator(SwingConstants.HORIZONTAL));
 
@@ -77,21 +68,19 @@ public class Settings extends JFrame implements ActionListener {
                 bg2.add(rButtonPlayer2);
                 box2.add(rButtonPlayer1);
                 box2.add(rButtonPlayer2);
-                box2.setSize(140, 60);
-//                box2.setLocation(60, 130);
                 settingsFrame.add(box2);
                 settingsFrame.add(new JSeparator(SwingConstants.HORIZONTAL));
 
                 JButton ok = new JButton("Ok");
-                ok.setSize(30, 20);
-//                ok.setLocation(85, 210);
                 settingsFrame.add(ok, BorderLayout.EAST);
+
+                settingsFrame.pack();
 
                 ok.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            setSettings(sounds, game);
+                            setSettings(sounds, game, players);
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
@@ -133,14 +122,14 @@ public class Settings extends JFrame implements ActionListener {
                 rButtonPlayer1.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        player = 1;
+                        players = 1;
                     }
                 });
 
                 rButtonPlayer2.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        player = 2;
+                        players = 2;
                     }
                 });
 
@@ -154,12 +143,12 @@ public class Settings extends JFrame implements ActionListener {
         });
     }
 
-    private void setSettings(final int sounds, final int game) throws IOException {
+    private void setSettings(final int sounds, final int game, final int players) throws IOException {
         Properties prop = new Properties();
         try {
             prop.setProperty("sounds", String.valueOf(sounds));
             prop.setProperty("game", String.valueOf(game));
-            prop.setProperty("players", String.valueOf(player));
+            prop.setProperty("players", String.valueOf(players));
             prop.store(new BufferedWriter(new OutputStreamWriter(new FileOutputStream("config/settings.ini"), "UTF-8")), null);
         } catch (IOException ex) {
             ex.printStackTrace();

@@ -19,7 +19,7 @@ public class Rule extends JFrame implements ActionListener {
                 setDefaultCloseOperation(EXIT_ON_CLOSE);
                 ruleFrame.setSize(300, 220);
                 ruleFrame.setLocationRelativeTo(null);
-                ruleFrame.setResizable(false);
+                ruleFrame.setResizable(true);
                 ruleFrame.setVisible(true);
                 ruleFrame.setLayout(null);
 
@@ -73,3 +73,7 @@ public class Rule extends JFrame implements ActionListener {
         });
     }
 }
+/*
+ JDialog
+ OK, "asdasd" OK_WINDOW
+ */
