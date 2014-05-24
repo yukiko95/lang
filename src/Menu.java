@@ -9,7 +9,6 @@ import java.io.*;
 import java.util.Properties;
 
 public class Menu extends JFrame {
-    private static JPanel imagePanel = new JPanel();
 
     enum FieldSize {
         THREE_THREE, INFINITY
@@ -19,18 +18,18 @@ public class Menu extends JFrame {
     Menu() throws IOException {
         super("Крестики нолики");
         setSize(500, 375);
-        setResizable(false);
+        setResizable(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        imagePanel.setLayout(null);
 
-//        JLabel imageIcon = new JLabel();
-//        imageIcon.setIcon(new ImageIcon("pic1.jpeg"));
-//        imageIcon.setLocation(0, 0);
-//        imageIcon.setSize(500, 375);
-//        imagePanel.add(imageIcon);
+        JLayeredPane jLayeredPane = new JLayeredPane();
 
-//        setContentPane(imagePanel);
+        JLabel imageIcon = new JLabel();
+        imageIcon.setIcon(new ImageIcon("pic1.jpeg"));
+        imageIcon.setLocation(0, 0);
+        imageIcon.setSize(500, 375);
+        jLayeredPane.setLayer(imageIcon, 0);
+
 
         JButton buttonPlay = new JButton("Играть");
         buttonPlay.setSize(120, 30);
@@ -51,14 +50,18 @@ public class Menu extends JFrame {
         buttonExit.setLocation(190, 250);
         buttonPlay.setOpaque(false);
 
+        jLayeredPane.setLayer(buttonPlay, 1);
+        jLayeredPane.setLayer(buttonRule, 1);
+        jLayeredPane.setLayer(buttonSettings, 1);
+        jLayeredPane.setLayer(buttonExit, 1);
 
-        imagePanel.add(buttonPlay);
-        imagePanel.add(buttonRule);
-        imagePanel.add(buttonSettings);
-        imagePanel.add(buttonExit);
-        setContentPane(imagePanel);
+        jLayeredPane.add(imageIcon);
+        jLayeredPane.add(buttonPlay);
+        jLayeredPane.add(buttonRule);
+        jLayeredPane.add(buttonSettings);
+        jLayeredPane.add(buttonExit);
 
-
+        add(jLayeredPane);
         buttonPlay.addActionListener(playGame());
 
         buttonRule.addActionListener(new Rule());
@@ -68,19 +71,15 @@ public class Menu extends JFrame {
         buttonExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Menu.getFrames()[0].dispose();
+                System.exit(0);
             }
         });
     }
 
     private GameInterf playGame() throws IOException {
         GetSettings getSettings = new GetSettings();
-        int game = getSettings.getGame();
-
-        int players = getSettings.getPlayer();
-
-        System.out.println(players);
-
+        int game = 0;
+        int players = 2;
         Properties prop = new Properties();
         try {
             prop.load(new InputStreamReader(new FileInputStream("config/settings.ini"), "UTF-8"));

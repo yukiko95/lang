@@ -23,14 +23,11 @@ public class Game_3x3_2_Players extends JFrame implements ActionListener, GameIn
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
                 mainFrame.setSize(150, 150);
                 mainFrame.setResizable(false);
                 mainFrame.setLocationRelativeTo(null);
                 mainFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
                 mainFrame.setLayout(new BorderLayout());
-                mainFrame.setVisible(true);
                 new Game();
 
                 mainFrame.addWindowListener(new WindowAdapter() {
@@ -50,8 +47,8 @@ public class Game_3x3_2_Players extends JFrame implements ActionListener, GameIn
                     }
                 });
 
-            }
-        });
+        mainFrame.setVisible(true);
+
 
     }
 
