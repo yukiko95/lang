@@ -48,8 +48,6 @@ public class Game_3x3_2_Players extends JFrame implements ActionListener, GameIn
                 });
 
         mainFrame.setVisible(true);
-
-
     }
 
     private class Game extends JFrame implements ActionListener {

@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.util.Properties;
 
 public class Menu extends JFrame {
 
@@ -78,18 +77,8 @@ public class Menu extends JFrame {
 
     private GameInterf playGame() throws IOException {
         GetSettings getSettings = new GetSettings();
-        int game = 0;
-        int players = 2;
-        Properties prop = new Properties();
-        try {
-            prop.load(new InputStreamReader(new FileInputStream("config/settings.ini"), "UTF-8"));
-            game = Integer.parseInt(prop.getProperty("game"));
-            players = Integer.parseInt(prop.getProperty("players"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        System.out.println(game);
+        int game = getSettings.getGame();
+        int players = getSettings.getPlayer();
         if (game == 0) {
             if (players == 2) {
                return new Game_3x3_2_Players();
