@@ -3,6 +3,7 @@
  */
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -12,7 +13,6 @@ public class Menu extends JFrame {
     enum FieldSize {
         THREE_THREE, INFINITY
     }
-
 
     Menu() throws IOException {
         super("Крестики нолики");
@@ -29,38 +29,32 @@ public class Menu extends JFrame {
         imageIcon.setSize(500, 375);
         jLayeredPane.setLayer(imageIcon, 0);
 
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5,10));
+        buttonPanel.setSize(130, 170);
+        buttonPanel.setOpaque(false);
 
-        JButton buttonPlay = new JButton("Играть");
-        buttonPlay.setSize(120, 30);
-        buttonPlay.setLocation(190, 100);
+        JButton buttonPlay = new JButton("   Играть   ");
         buttonPlay.setOpaque(false);
-        JButton buttonRule = new JButton("Правила");
-        buttonRule.setSize(120, 30);
-        buttonRule.setLocation(190, 150);
+        JButton buttonRule = new JButton("  Правила ");
         buttonPlay.setOpaque(false);
 
         JButton buttonSettings = new JButton("Настройки");
-        buttonSettings.setSize(120, 30);
-        buttonSettings.setLocation(190, 200);
         buttonPlay.setOpaque(false);
 
-        JButton buttonExit = new JButton("Выход");
-        buttonExit.setSize(120, 30);
-        buttonExit.setLocation(190, 250);
+        JButton buttonExit = new JButton("   Выход    ");
         buttonPlay.setOpaque(false);
 
-        jLayeredPane.setLayer(buttonPlay, 1);
-        jLayeredPane.setLayer(buttonRule, 1);
-        jLayeredPane.setLayer(buttonSettings, 1);
-        jLayeredPane.setLayer(buttonExit, 1);
+        buttonPanel.add(buttonPlay);
+        buttonPanel.add(buttonRule);
+        buttonPanel.add(buttonSettings);
+        buttonPanel.add(buttonExit);
 
         jLayeredPane.add(imageIcon);
-        jLayeredPane.add(buttonPlay);
-        jLayeredPane.add(buttonRule);
-        jLayeredPane.add(buttonSettings);
-        jLayeredPane.add(buttonExit);
-
+        jLayeredPane.setLayer(buttonPanel,1);
+        jLayeredPane.add(buttonPanel);
+        buttonPanel.setLocation(175,100);
         add(jLayeredPane);
+
         buttonPlay.addActionListener(playGame());
 
         buttonRule.addActionListener(new Rule());
