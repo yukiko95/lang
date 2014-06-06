@@ -1,15 +1,22 @@
 import com.sun.org.apache.xpath.internal.SourceTree;
+import javafx.scene.media.MediaPlayer;
 
+import javax.print.attribute.standard.Media;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by darya on 17.05.14.
@@ -19,6 +26,8 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
     private static int SIZE = 3;
     private JButton[][] buttons = new JButton[SIZE][SIZE];
     private JButton backToMenuButton;
+    private JButton newGameButton;
+    private JLabel label;
     private int emptyCells = 9;
     private final String name1 = "Player1";
     private final String name2 = "AI";
@@ -62,9 +71,23 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
             centerPanel.setLayout(new GridLayout(SIZE, SIZE));
             mainFrame.add(centerPanel, BorderLayout.CENTER);
 
-            backToMenuButton = new JButton("working!!");
+            JPanel buttonsPanel = new JPanel();
+            JPanel labelPanel = new JPanel();
+
+            backToMenuButton = new JButton(new ImageIcon("pictures/back.png"));
+            newGameButton = new JButton(new ImageIcon("pictures/update.png"));
+
             backToMenuButton.addActionListener(this);
-            mainFrame.add(backToMenuButton, BorderLayout.NORTH);
+            newGameButton.addActionListener(this);
+            buttonsPanel.add(backToMenuButton, BorderLayout.WEST);
+            buttonsPanel.add(newGameButton, BorderLayout.EAST);
+
+            mainFrame.add(buttonsPanel, BorderLayout.NORTH);
+
+            label = new JLabel("Ход " + name1);
+            labelPanel.add(label, BorderLayout.CENTER);
+
+            mainFrame.add(labelPanel, BorderLayout.SOUTH);
 
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
@@ -80,26 +103,37 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
         public void actionPerformed(ActionEvent e) {
             JButton theButton = (JButton) e.getSource();
             if (theButton == backToMenuButton) {
-                try {
-                    new Menu();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                return;
+                mainFrame.dispose();
+            }
+            if (theButton == newGameButton) {
+                new Game_3x3_AI();
             }
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
                     if (theButton == buttons[i][j]) {
+                        playSound();
                         theButton.setText(whoseTurn());
                         flag = false;
                         theButton.setEnabled(false);
-                        checkVin();
+                        checkWin();
                         setWeights(i, j);
                         emptyCells -= 1;
                         runAI();
                     }
                 }
             }
+        }
+    }
+
+    public void playSound() {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sounds/sound.wav").getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
         }
     }
 
@@ -128,12 +162,13 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
         }
         int index = (int) (Math.random() * (map.size() - 1));
         ArrayList<Integer> cellIndex = map.get(index);
+        playSound();
         buttons[cellIndex.get(0)][cellIndex.get(1)].setText(whoseTurn());
         flag = true;
         buttons[cellIndex.get(0)][cellIndex.get(1)].setEnabled(false);
         setWeights(cellIndex.get(0), cellIndex.get(1));
         emptyCells -= 1;
-        checkVin();
+        checkWin();
 
     }
 
@@ -167,7 +202,7 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
         for (int k = 0; k < SIZE; k++) {
             for (int n = 0; n < SIZE; n++) {
                 System.out.print(weights[k][n] + " ");
-                            }
+            }
             System.out.println();
         }
         System.out.println("---------------");
@@ -180,46 +215,48 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
                 (buttons[0][1].getText().equals(buttons[2][1].getText()) && !buttons[0][1].getText().equals(""))) {
             weights[1][1] = weights[1][1] + 1000;
         }
-        if ((buttons[0][0].getText().equals(buttons[2][0].getText())&& !buttons[0][0].getText().equals(""))) {
+        if ((buttons[0][0].getText().equals(buttons[2][0].getText()) && !buttons[0][0].getText().equals(""))) {
             weights[1][0] = weights[1][0] + 1000;
         }
-        if ((buttons[0][0].getText().equals(buttons[0][2].getText())&& !buttons[0][0].getText().equals(""))) {
+        if ((buttons[0][0].getText().equals(buttons[0][2].getText()) && !buttons[0][0].getText().equals(""))) {
             weights[0][1] = weights[0][1] + 1000;
         }
-        if ((buttons[2][0].getText().equals(buttons[2][2].getText())&& !buttons[2][0].getText().equals(""))) {
+        if ((buttons[2][0].getText().equals(buttons[2][2].getText()) && !buttons[2][0].getText().equals(""))) {
             weights[2][1] = weights[2][1] + 1000;
         }
-        if ((buttons[0][2].getText().equals(buttons[2][2].getText())&& !buttons[0][2].getText().equals(""))) {
+        if ((buttons[0][2].getText().equals(buttons[2][2].getText()) && !buttons[0][2].getText().equals(""))) {
             weights[1][2] = weights[1][2] + 1000;
         }
-        if ((buttons[0][0].getText().equals(buttons[1][1].getText())&& !buttons[0][0].getText().equals(""))) {
+        if ((buttons[0][0].getText().equals(buttons[1][1].getText()) && !buttons[0][0].getText().equals(""))) {
             weights[2][2] = weights[2][2] + 1000;
         }
-        if ((buttons[1][1].getText().equals(buttons[2][2].getText())&& !buttons[1][1].getText().equals(""))) {
+        if ((buttons[1][1].getText().equals(buttons[2][2].getText()) && !buttons[1][1].getText().equals(""))) {
             weights[0][0] = weights[0][0] + 1000;
         }
-        if ((buttons[2][0].getText().equals(buttons[1][1].getText())&& !buttons[2][0].getText().equals(""))) {
+        if ((buttons[2][0].getText().equals(buttons[1][1].getText()) && !buttons[2][0].getText().equals(""))) {
             weights[0][2] = weights[0][2] + 1000;
         }
-        if ((buttons[0][2].getText().equals(buttons[1][1].getText())&& !buttons[0][2].getText().equals(""))) {
+        if ((buttons[0][2].getText().equals(buttons[1][1].getText()) && !buttons[0][2].getText().equals(""))) {
             weights[2][0] = weights[2][0] + 1000;
         }
-        for (int i = 0; i < SIZE - 1; i++) {
-            for (int j = 0; j < SIZE - 1; j++) {
-                if ((buttons[i][j].getText().equals(buttons[i][j + 1].getText()) && j + 1 < SIZE && !buttons[i][j].getText().equals(""))) {
-                    if (j - 1 >= 0) {
-                        weights[i][j - 1] = weights[i][j - 1] + 1000;
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (j + 1 < SIZE) {
+                    if ((buttons[i][j].getText().equals(buttons[i][j + 1].getText()) && !buttons[i][j].getText().equals(""))) {
+                        if (j - 1 >= 0) {
+                            weights[i][j - 1] = weights[i][j - 1] + 1000;
+                        }
+                        if (j + 2 < SIZE) {
+                            weights[i][j + 2] = weights[i][j + 2] + 1000;
+                        }
                     }
-                    if (j + 2 < SIZE) {
-                        weights[i][j + 2] = weights[i][j + 2] + 1000;
-                    }
-                }
-                if ((buttons[j][i].getText().equals(buttons[j + 1][i].getText()) && j + 1 < SIZE && !buttons[j][i].getText().equals(""))) {
-                    if (j - 1 >= 0) {
-                        weights[j - 1][i] = weights[j - 1][i] + 1000;
-                    }
-                    if (j + 2 < SIZE) {
-                        weights[j + 2][i] = weights[j + 2][i] + 1000;
+                    if ((buttons[j][i].getText().equals(buttons[j + 1][i].getText()) && !buttons[j][i].getText().equals(""))) {
+                        if (j - 1 >= 0) {
+                            weights[j - 1][i] = weights[j - 1][i] + 1000;
+                        }
+                        if (j + 2 < SIZE) {
+                            weights[j + 2][i] = weights[j + 2][i] + 1000;
+                        }
                     }
                 }
             }
@@ -227,7 +264,7 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
     }
 
     @Override
-    public void checkVin() {
+    public void checkWin() {
         for (int i = 0; i < SIZE; i++) {
             if (buttons[i][0].getText().equals("")) {
                 continue;
@@ -278,20 +315,20 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
         }
     }
 
-    public void newGame(String win){
+    public void newGame(String win) {
         final JFrame frame = new JFrame("Итог");
-        frame.setLayout(new FlowLayout(FlowLayout.CENTER,10,10));
+        frame.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         frame.setDefaultCloseOperation(1);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        frame.setSize(180,130);
+        frame.setSize(180, 130);
         frame.add(new JLabel(win), BorderLayout.NORTH);
         frame.add(new JLabel("Начать новую игру?"), BorderLayout.CENTER);
         JPanel panel = new JPanel();
         panel.setSize(100, 50);
         JButton yes = new JButton("Да");
         JButton no = new JButton("Нет");
-        panel.add(yes,BorderLayout.WEST);
+        panel.add(yes, BorderLayout.WEST);
         panel.add(no, BorderLayout.EAST);
         frame.add(panel, BorderLayout.SOUTH);
         yes.addActionListener(new ActionListener() {
@@ -329,8 +366,10 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
     @Override
     public String whoseTurn() {
         if (emptyCells != 0 && !flag) {
+            label.setText("Ход " + name1);
             return "O";
         }
+        label.setText("Ход " + name2);
         return "X";
     }
 }

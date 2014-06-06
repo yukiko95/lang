@@ -13,7 +13,7 @@ public class Game_Infinity_AI extends JFrame implements ActionListener,  GameInt
     }
 
     @Override
-    public void checkVin() {
+    public void checkWin() {
 
     }
 

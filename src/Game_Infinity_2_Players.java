@@ -13,7 +13,7 @@ public class Game_Infinity_2_Players extends JFrame implements ActionListener,  
     }
 
     @Override
-    public void checkVin() {
+    public void checkWin() {
 
     }
 

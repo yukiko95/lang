@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
  */
 public interface GameInterf extends ActionListener {
 
-    void checkVin();
+    void checkWin();
 
     void showMessage(JButton matrixButtons);
 

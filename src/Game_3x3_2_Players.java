@@ -18,7 +18,7 @@ public class Game_3x3_2_Players extends JFrame implements ActionListener, GameIn
     private int emptyCells = 9;
     private final String name1 = "Player1";
     private final String name2 = "Player2";
-    private boolean vin = false;
+    private boolean win = false;
     private JFrame mainFrame = new JFrame("2 игрока");
 
     @Override
@@ -86,7 +86,7 @@ public class Game_3x3_2_Players extends JFrame implements ActionListener, GameIn
                         theButton.setText(whoseTurn());
                         theButton.setEnabled(false);
                         emptyCells -= 1;
-                        checkVin();
+                        checkWin();
                     }
                 }
             }
@@ -102,7 +102,7 @@ public class Game_3x3_2_Players extends JFrame implements ActionListener, GameIn
     }
 
     @Override
-    public void checkVin() {
+    public void checkWin() {
         for (int i = 0; i < SIZE; i++) {
             if (matrixButtons[i][0].getText().equals("")) {
                 continue;
@@ -116,7 +116,7 @@ public class Game_3x3_2_Players extends JFrame implements ActionListener, GameIn
             }
             if (check) {
                 showMessage(matrixButtons[i][0]);
-                vin = true;
+                win = true;
                 break;
             }
             if (i == 0 || matrixButtons[0][i].getText().equals("")) {
@@ -131,7 +131,7 @@ public class Game_3x3_2_Players extends JFrame implements ActionListener, GameIn
             }
             if (check) {
                 showMessage(matrixButtons[0][i]);
-                vin = true;
+                win = true;
                 break;
             }
         }
@@ -139,15 +139,15 @@ public class Game_3x3_2_Players extends JFrame implements ActionListener, GameIn
                 matrixButtons[1][1].getText().equals(matrixButtons[2][2].getText()) &&
                 !matrixButtons[0][0].getText().equals("")) {
             showMessage(matrixButtons[0][0]);
-            vin = true;
+            win = true;
         }
         if (matrixButtons[0][2].getText().equals(matrixButtons[1][1].getText()) &&
                 matrixButtons[1][1].getText().equals(matrixButtons[2][0].getText()) &&
                 !matrixButtons[0][2].getText().equals("")) {
             showMessage(matrixButtons[0][2]);
-            vin = true;
+            win = true;
         }
-        if (!vin && emptyCells == 0) {
+        if (!win && emptyCells == 0) {
             JOptionPane.showMessageDialog(this, "Ничья", "Итог", JOptionPane.DEFAULT_OPTION);
         }
     }

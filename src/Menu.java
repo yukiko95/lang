@@ -24,7 +24,7 @@ public class Menu extends JFrame {
         JLayeredPane jLayeredPane = new JLayeredPane();
 
         JLabel imageIcon = new JLabel();
-        imageIcon.setIcon(new ImageIcon("pic1.jpeg"));
+        imageIcon.setIcon(new ImageIcon("pictures/font.jpeg"));
         imageIcon.setLocation(0, 0);
         imageIcon.setSize(500, 375);
         jLayeredPane.setLayer(imageIcon, 0);
