@@ -31,13 +31,13 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
     private int emptyCells = 9;
     private final String name1 = "Player1";
     private final String name2 = "AI";
-    private boolean vin = false;
-    private JFrame mainFrame = new JFrame("Игрок против компьютера");
+    private boolean win = false;
+    private JFrame mainFrame;
     private int[][] weights = new int[3][3];
     private boolean flag = true;
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    public void initGame() {
+        mainFrame = new JFrame("Игрок против компьютера");
         mainFrame.setSize(150, 150);
         mainFrame.setResizable(false);
         mainFrame.setLocationRelativeTo(null);
@@ -63,6 +63,11 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
         });
 
         mainFrame.setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        initGame();
     }
 
     private class Game extends JFrame implements ActionListener {
@@ -106,7 +111,8 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
                 mainFrame.dispose();
             }
             if (theButton == newGameButton) {
-                new Game_3x3_AI();
+                mainFrame.dispose();
+                initGame();
             }
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
@@ -169,7 +175,6 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
         setWeights(cellIndex.get(0), cellIndex.get(1));
         emptyCells -= 1;
         checkWin();
-
     }
 
     public void setWeights(int i, int j) {
@@ -278,7 +283,7 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
             }
             if (check) {
                 showMessage(buttons[i][0]);
-                vin = true;
+                win = true;
                 break;
             }
             if (i == 0 || buttons[0][i].getText().equals("")) {
@@ -293,7 +298,7 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
             }
             if (check) {
                 showMessage(buttons[0][i]);
-                vin = true;
+                win = true;
                 break;
             }
         }
@@ -301,15 +306,15 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
                 buttons[1][1].getText().equals(buttons[2][2].getText()) &&
                 !buttons[0][0].getText().equals("")) {
             showMessage(buttons[0][0]);
-            vin = true;
+            win = true;
         }
         if (buttons[0][2].getText().equals(buttons[1][1].getText()) &&
                 buttons[1][1].getText().equals(buttons[2][0].getText()) &&
                 !buttons[0][2].getText().equals("")) {
             showMessage(buttons[0][2]);
-            vin = true;
+            win = true;
         }
-        if (!vin && emptyCells == 0) {
+        if (!win && emptyCells == 0) {
 //            JOptionPane.showMessageDialog(this, "Ничья", "Итог", JOptionPane.DEFAULT_OPTION);
             newGame("Ничья");
         }
@@ -318,7 +323,7 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
     public void newGame(String win) {
         final JFrame frame = new JFrame("Итог");
         frame.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        frame.setDefaultCloseOperation(1);
+        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setSize(180, 130);
@@ -341,14 +346,8 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                try {
-                    new Menu();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
             }
         });
-
         frame.setVisible(true);
     }
 
@@ -373,4 +372,3 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
         return "X";
     }
 }
-
