@@ -73,6 +73,8 @@ public class Menu extends JFrame {
         GetSettings getSettings = new GetSettings();
         int game = getSettings.getGame();
         int players = getSettings.getPlayer();
+        System.out.println(game);
+        System.out.println(players);
         if (game == 0) {
             if (players == 2) {
                return new Game_3x3_2_Players();

@@ -5,6 +5,7 @@ import javax.print.attribute.standard.Media;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -136,6 +137,8 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sounds/sound.wav").getAbsoluteFile());
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue((float)(new GetSettings()).getSounds() - 100);
             clip.start();
         } catch (Exception ex) {
             System.out.println("Error with playing sound.");
