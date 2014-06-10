@@ -152,10 +152,14 @@ public class Game_Infinity_2Players extends JFrame implements ActionListener, Ga
         }
 
         @Override
-        public void checkWin() {
-            if (!win && emptyCells == 0) {
-                newGame("Ничья");
+        public String checkWin() {
+            if (emptyCells == 0) {
+                return "XO";
             }
+            return "";
+//            if (!win && emptyCells == 0) {
+//                newGame("Ничья");
+//            }
         }
 
         @Override
@@ -171,7 +175,6 @@ public class Game_Infinity_2Players extends JFrame implements ActionListener, Ga
             }
         }
 
-        @Override
         public void showMessage(JButton button) {
             if (button.getText().equals("X")) {
                 newGame("Победил " + name1);

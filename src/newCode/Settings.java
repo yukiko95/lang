@@ -19,12 +19,13 @@ import java.util.Properties;
 
 public class Settings extends JFrame implements ActionListener {
     private JFrame settingsFrame;
-    private int sounds;
-    private int game;
-    private int players;
+    private int sounds = 0;
+    private int game = 0;
+    private int players = 1;
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        setSettings(sounds, game, players);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         settingsFrame = new JFrame("Настройки");
         settingsFrame.setSize(200, 200);

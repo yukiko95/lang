@@ -14,11 +14,7 @@ public interface GameInterface extends ActionListener {
 
         public String whoseTurn();
 
-        public void checkWin();
-
         public void playSound();
-
-        public void showMessage(JButton buttons);
 
         public void newGame(String win);
     }

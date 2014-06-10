@@ -122,7 +122,14 @@ public class Game_3x3_2Players extends JFrame implements ActionListener, GameInt
                         theButton.setText(whoseTurn());
                         theButton.setEnabled(false);
                         emptyCells -= 1;
-                        checkWin();
+                        String win = new Game_3x3().checkWin(buttons, emptyCells);
+                        if (!win.equals("")) {
+                            if (win.equals("X") || win.equals("O")) {
+                                showMessage(win);
+                            } else {
+                                showMessage("Ничья");
+                            }
+                        }
                     }
                 }
             }
@@ -139,59 +146,6 @@ public class Game_3x3_2Players extends JFrame implements ActionListener, GameInt
         }
 
         @Override
-        public void checkWin() {
-            for (int i = 0; i < SIZE; i++) {
-                if (buttons[i][0].getText().equals("")) {
-                    continue;
-                }
-                boolean check = true;
-                for (int j = 1; j < SIZE; j++) {
-                    if (!buttons[i][j - 1].getText().equals(buttons[i][j].getText())) {
-                        check = false;
-                        break;
-                    }
-                }
-                if (check) {
-                    win = true;
-                    showMessage(buttons[i][0]);
-                    return;
-                }
-                if (i == 0 || buttons[0][i].getText().equals("")) {
-                    continue;
-                }
-                check = true;
-                for (int j = 0; j < SIZE; j++) {
-                    if (!buttons[j][i - 1].getText().equals(buttons[j][i].getText())) {
-                        check = false;
-                        break;
-                    }
-                }
-                if (check) {
-                    win = true;
-                    showMessage(buttons[0][i]);
-                    return;
-                }
-            }
-            if (buttons[0][0].getText().equals(buttons[1][1].getText()) &&
-                    buttons[1][1].getText().equals(buttons[2][2].getText()) &&
-                    !buttons[0][0].getText().equals("")) {
-                win = true;
-                showMessage(buttons[0][0]);
-                return;
-            }
-            if (buttons[0][2].getText().equals(buttons[1][1].getText()) &&
-                    buttons[1][1].getText().equals(buttons[2][0].getText()) &&
-                    !buttons[0][2].getText().equals("")) {
-                win = true;
-                showMessage(buttons[0][2]);
-                return;
-            }
-            if (!win && emptyCells == 0) {
-                newGame("Ничья");
-            }
-        }
-
-        @Override
         public void playSound() {
             try {
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sounds/sound.wav").getAbsoluteFile());
@@ -204,9 +158,8 @@ public class Game_3x3_2Players extends JFrame implements ActionListener, GameInt
             }
         }
 
-        @Override
-        public void showMessage(JButton button) {
-            if (button.getText().equals("X")) {
+        public void showMessage(String win) {
+            if (win.equals("X")) {
                 newGame("Победил " + name1);
             } else {
                 newGame("Победил " + name2);

@@ -28,7 +28,7 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface
     private int emptyCells = 9;
     private final int sounds;
     private final String name1 = "Player1";
-    private final String name2 = "Player2";
+    private final String name2 = "Bot";
     private boolean win = false;
     private boolean flag = true;
 
@@ -43,7 +43,7 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface
 
     @Override
     public void initGame() {
-        mainFrame = new JFrame("2 игрока");
+        mainFrame = new JFrame("Игра с компьютером");
         mainFrame.setSize(150, 150);
         mainFrame.setResizable(false);
         mainFrame.setLocationRelativeTo(null);
@@ -128,8 +128,16 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface
                         theButton.setText(whoseTurn());
                         theButton.setEnabled(false);
                         emptyCells -= 1;
-                        checkWin();
-                        setWeights(i,j);
+                        setWeights(i, j);
+                        String win = new Game_3x3().checkWin(buttons, emptyCells);
+                        if (!win.equals("")) {
+                            if (win.equals("X") || win.equals("O")) {
+                                showMessage(win);
+                            } else {
+                                showMessage("Ничья");
+                            }
+                            return;
+                        }
                         runAI();
                     }
                 }
@@ -176,7 +184,15 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface
             buttons[cellIndex.get(0)][cellIndex.get(1)].setEnabled(false);
             setWeights(cellIndex.get(0), cellIndex.get(1));
             emptyCells -= 1;
-            checkWin();
+            String win = new Game_3x3().checkWin(buttons, emptyCells);
+            System.out.println("win: " + win);
+            if (!win.equals("")) {
+                if (win.equals("X") || win.equals("O")) {
+                    showMessage(win);
+                } else {
+                    showMessage("Ничья");
+                }
+            }
         }
 
         public void setWeights(int i, int j) {
@@ -271,59 +287,6 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface
         }
 
         @Override
-        public void checkWin() {
-            for (int i = 0; i < SIZE; i++) {
-                if (buttons[i][0].getText().equals("")) {
-                    continue;
-                }
-                boolean check = true;
-                for (int j = 1; j < SIZE; j++) {
-                    if (!buttons[i][j - 1].getText().equals(buttons[i][j].getText())) {
-                        check = false;
-                        break;
-                    }
-                }
-                if (check) {
-                    win = true;
-                    showMessage(buttons[i][0]);
-                    return;
-                }
-                if (i == 0 || buttons[0][i].getText().equals("")) {
-                    continue;
-                }
-                check = true;
-                for (int j = 0; j < SIZE; j++) {
-                    if (!buttons[j][i - 1].getText().equals(buttons[j][i].getText())) {
-                        check = false;
-                        break;
-                    }
-                }
-                if (check) {
-                    win = true;
-                    showMessage(buttons[0][i]);
-                    return;
-                }
-            }
-            if (buttons[0][0].getText().equals(buttons[1][1].getText()) &&
-                    buttons[1][1].getText().equals(buttons[2][2].getText()) &&
-                    !buttons[0][0].getText().equals("")) {
-                win = true;
-                showMessage(buttons[0][0]);
-                return;
-            }
-            if (buttons[0][2].getText().equals(buttons[1][1].getText()) &&
-                    buttons[1][1].getText().equals(buttons[2][0].getText()) &&
-                    !buttons[0][2].getText().equals("")) {
-                win = true;
-                showMessage(buttons[0][2]);
-                return;
-            }
-            if (!win && emptyCells == 0) {
-                newGame("Ничья");
-            }
-        }
-
-        @Override
         public void playSound() {
             try {
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sounds/sound.wav").getAbsoluteFile());
@@ -336,9 +299,8 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface
             }
         }
 
-        @Override
-        public void showMessage(JButton button) {
-            if (button.getText().equals("X")) {
+        public void showMessage(String win) {
+            if (win.equals("X")) {
                 newGame("Победил " + name1);
             } else {
                 newGame("Победил " + name2);
@@ -347,7 +309,8 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface
 
         @Override
         public void newGame(String win) {
-            int res = JOptionPane.showConfirmDialog(null,
+            int res = JOptionPane.showConfirmDialog(
+                    null,
                     win + "\nНачать новую игру ?",
                     "Итог",
                     JOptionPane.YES_NO_OPTION,
