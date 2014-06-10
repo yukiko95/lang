@@ -1,4 +1,4 @@
-/**
+package oldCode; /**
  * Created by darya on 1.05.14.
  */
 
@@ -53,17 +53,17 @@ public class Rule extends JFrame implements ActionListener {
 //        ruleFrame.addWindowListener(new WindowAdapter() {
 //            @Override
 //            public void windowOpened(WindowEvent e) {
-//                Menu.getFrames()[0].setEnabled(false);
+//                oldCode.Menu.getFrames()[0].setEnabled(false);
 //            }
 //
 //            @Override
 //            public void windowClosing(WindowEvent e) {
-//                Menu.getFrames()[0].setEnabled(true);
+//                oldCode.Menu.getFrames()[0].setEnabled(true);
 //            }
 //
 //            @Override
 //            public void windowClosed(WindowEvent e) {
-//                Menu.getFrames()[0].setEnabled(true);
+//                oldCode.Menu.getFrames()[0].setEnabled(true);
 //            }
 //        });
 //

@@ -1,7 +1,5 @@
-import com.sun.org.apache.xpath.internal.SourceTree;
-import javafx.scene.media.MediaPlayer;
+package oldCode;
 
-import javax.print.attribute.standard.Media;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -13,11 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
-import java.util.List;
-import java.util.Timer;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by darya on 17.05.14.
@@ -161,7 +155,6 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
             for (int j = 0; j < SIZE; j++) {
                 ArrayList<Integer> list = new ArrayList<Integer>();
                 if (weights[i][j] == max) {
-                    System.out.println(max);    //
                     list.add(i);
                     list.add(j);
                     map.put(k, list);
@@ -185,27 +178,27 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
         weights[i][j] = weights[i][j] - 100000;
         if (i - 1 >= 0) {
             if (j - 1 >= 0) {
-                weights[i - 1][j - 1] = weights[i - 1][j - 1] + 10;
+                weights[i - 1][j - 1] = weights[i - 1][j - 1] + 1;
             }
             if (j + 1 < SIZE) {
-                weights[i - 1][j + 1] = weights[i - 1][j + 1] + 10;
+                weights[i - 1][j + 1] = weights[i - 1][j + 1] + 1;
             }
-            weights[i - 1][j] = weights[i - 1][j] + 10;
+            weights[i - 1][j] = weights[i - 1][j] + 1;
         }
         if (i + 1 < SIZE) {
             if (j - 1 >= 0) {
-                weights[i + 1][j - 1] = weights[i + 1][j - 1] + 10;
+                weights[i + 1][j - 1] = weights[i + 1][j - 1] + 1;
             }
             if (j + 1 < SIZE) {
-                weights[i + 1][j + 1] = weights[i + 1][j + 1] + 10;
+                weights[i + 1][j + 1] = weights[i + 1][j + 1] + 1;
             }
-            weights[i + 1][j] = weights[i + 1][j] + 10;
+            weights[i + 1][j] = weights[i + 1][j] + 1;
         }
         if (j - 1 >= 0) {
-            weights[i][j - 1] = weights[i][j - 1] + 10;
+            weights[i][j - 1] = weights[i][j - 1] + 1;
         }
         if (j + 1 < SIZE) {
-            weights[i][j + 1] = weights[i][j + 1] + 10;
+            weights[i][j + 1] = weights[i][j + 1] + 1;
         }
         for (int k = 0; k < SIZE; k++) {
             for (int n = 0; n < SIZE; n++) {
@@ -221,49 +214,49 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterf {
                 (buttons[0][0].getText().equals(buttons[2][2].getText()) && !buttons[0][0].getText().equals("")) ||
                 (buttons[0][2].getText().equals(buttons[2][0].getText()) && !buttons[0][2].getText().equals("")) ||
                 (buttons[0][1].getText().equals(buttons[2][1].getText()) && !buttons[0][1].getText().equals(""))) {
-            weights[1][1] = weights[1][1] + 1000;
+            weights[1][1] = weights[1][1] + 10000;
         }
         if ((buttons[0][0].getText().equals(buttons[2][0].getText()) && !buttons[0][0].getText().equals(""))) {
-            weights[1][0] = weights[1][0] + 1000;
+            weights[1][0] = weights[1][0] + 10000;
         }
         if ((buttons[0][0].getText().equals(buttons[0][2].getText()) && !buttons[0][0].getText().equals(""))) {
-            weights[0][1] = weights[0][1] + 1000;
+            weights[0][1] = weights[0][1] + 10000;
         }
         if ((buttons[2][0].getText().equals(buttons[2][2].getText()) && !buttons[2][0].getText().equals(""))) {
-            weights[2][1] = weights[2][1] + 1000;
+            weights[2][1] = weights[2][1] + 10000;
         }
         if ((buttons[0][2].getText().equals(buttons[2][2].getText()) && !buttons[0][2].getText().equals(""))) {
-            weights[1][2] = weights[1][2] + 1000;
+            weights[1][2] = weights[1][2] + 10000;
         }
         if ((buttons[0][0].getText().equals(buttons[1][1].getText()) && !buttons[0][0].getText().equals(""))) {
-            weights[2][2] = weights[2][2] + 1000;
+            weights[2][2] = weights[2][2] + 10000;
         }
         if ((buttons[1][1].getText().equals(buttons[2][2].getText()) && !buttons[1][1].getText().equals(""))) {
-            weights[0][0] = weights[0][0] + 1000;
+            weights[0][0] = weights[0][0] + 10000;
         }
         if ((buttons[2][0].getText().equals(buttons[1][1].getText()) && !buttons[2][0].getText().equals(""))) {
-            weights[0][2] = weights[0][2] + 1000;
+            weights[0][2] = weights[0][2] + 10000;
         }
         if ((buttons[0][2].getText().equals(buttons[1][1].getText()) && !buttons[0][2].getText().equals(""))) {
-            weights[2][0] = weights[2][0] + 1000;
+            weights[2][0] = weights[2][0] + 10000;
         }
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (j + 1 < SIZE) {
                     if ((buttons[i][j].getText().equals(buttons[i][j + 1].getText()) && !buttons[i][j].getText().equals(""))) {
                         if (j - 1 >= 0) {
-                            weights[i][j - 1] = weights[i][j - 1] + 1000;
+                            weights[i][j - 1] = weights[i][j - 1] + 10000;
                         }
                         if (j + 2 < SIZE) {
-                            weights[i][j + 2] = weights[i][j + 2] + 1000;
+                            weights[i][j + 2] = weights[i][j + 2] + 10000;
                         }
                     }
                     if ((buttons[j][i].getText().equals(buttons[j + 1][i].getText()) && !buttons[j][i].getText().equals(""))) {
                         if (j - 1 >= 0) {
-                            weights[j - 1][i] = weights[j - 1][i] + 1000;
+                            weights[j - 1][i] = weights[j - 1][i] + 10000;
                         }
                         if (j + 2 < SIZE) {
-                            weights[j + 2][i] = weights[j + 2][i] + 1000;
+                            weights[j + 2][i] = weights[j + 2][i] + 10000;
                         }
                     }
                 }
