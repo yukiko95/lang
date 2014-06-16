@@ -14,7 +14,7 @@ import java.io.File;
 /**
  * Created by Darya on 6/9/14.
  */
-public class Game_3x3_2Players extends JFrame implements ActionListener, GameInterface {
+public class Game_3x3_2Players extends JFrame implements ActionListener {
     private JFrame mainFrame;
     private JButton backToMenuButton;
     private JButton newGameButton;
@@ -37,7 +37,7 @@ public class Game_3x3_2Players extends JFrame implements ActionListener, GameInt
         initGame();
     }
 
-    @Override
+
     public void initGame() {
         mainFrame = new JFrame("2 игрока");
         mainFrame.setSize(150, 150);
@@ -68,7 +68,7 @@ public class Game_3x3_2Players extends JFrame implements ActionListener, GameInt
         });
     }
 
-    private class GameImpl extends JFrame implements Game, ActionListener {
+    private class GameImpl extends JFrame implements ActionListener {
         public GameImpl() {
             JPanel centerPanel = new JPanel();
             centerPanel.setLayout(new GridLayout(SIZE, SIZE));
@@ -105,7 +105,7 @@ public class Game_3x3_2Players extends JFrame implements ActionListener, GameInt
             }
         }
 
-        @Override
+
         public void actionPerformed(ActionEvent e) {
             JButton theButton = (JButton) e.getSource();
             if (theButton == backToMenuButton) {
@@ -122,7 +122,8 @@ public class Game_3x3_2Players extends JFrame implements ActionListener, GameInt
                         theButton.setText(whoseTurn());
                         theButton.setEnabled(false);
                         emptyCells -= 1;
-                        String win = new Game_3x3().checkWin(buttons, emptyCells);
+//                        String win = new Game_3x3().checkWin(buttons, emptyCells);
+                        String win = "";
                         if (!win.equals("")) {
                             if (win.equals("X") || win.equals("O")) {
                                 showMessage(win);
@@ -135,7 +136,7 @@ public class Game_3x3_2Players extends JFrame implements ActionListener, GameInt
             }
         }
 
-        @Override
+
         public String whoseTurn() {
             if (sounds != 0) {
                 playSound();
@@ -145,7 +146,7 @@ public class Game_3x3_2Players extends JFrame implements ActionListener, GameInt
             return flag ? "O" : "X";
         }
 
-        @Override
+
         public void playSound() {
             try {
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sounds/sound.wav").getAbsoluteFile());
@@ -166,7 +167,7 @@ public class Game_3x3_2Players extends JFrame implements ActionListener, GameInt
             }
         }
 
-        @Override
+
         public void newGame(String win) {
             int res = JOptionPane.showConfirmDialog(null,
                     win + "\nНачать новую игру ?",

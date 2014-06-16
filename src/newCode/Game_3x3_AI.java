@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Created by crazyministr on 6/10/14.
  */
-public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface {
+public class Game_3x3_AI extends JFrame implements ActionListener {
     private JFrame mainFrame;
     private JButton backToMenuButton;
     private JButton newGameButton;
@@ -41,7 +41,6 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface
         initGame();
     }
 
-    @Override
     public void initGame() {
         mainFrame = new JFrame("Игра с компьютером");
         mainFrame.setSize(150, 150);
@@ -72,7 +71,7 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface
         });
     }
 
-    private class GameImpl extends JFrame implements Game, ActionListener {
+    private class GameImpl extends JFrame implements ActionListener {
         public GameImpl() {
             JPanel centerPanel = new JPanel();
             centerPanel.setLayout(new GridLayout(SIZE, SIZE));
@@ -129,7 +128,8 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface
                         theButton.setEnabled(false);
                         emptyCells -= 1;
                         setWeights(i, j);
-                        String win = new Game_3x3().checkWin(buttons, emptyCells);
+//                        String win = new Game_3x3().checkWin(buttons, emptyCells);
+                        String win = "";
                         if (!win.equals("")) {
                             if (win.equals("X") || win.equals("O")) {
                                 showMessage(win);
@@ -144,7 +144,6 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface
             }
         }
 
-        @Override
         public String whoseTurn() {
             if (sounds != 0) {
                 playSound();
@@ -184,7 +183,8 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface
             buttons[cellIndex.get(0)][cellIndex.get(1)].setEnabled(false);
             setWeights(cellIndex.get(0), cellIndex.get(1));
             emptyCells -= 1;
-            String win = new Game_3x3().checkWin(buttons, emptyCells);
+//            String win = new Game_3x3().checkWin(buttons, emptyCells);
+            String win = "";
             System.out.println("win: " + win);
             if (!win.equals("")) {
                 if (win.equals("X") || win.equals("O")) {
@@ -286,7 +286,6 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface
             }
         }
 
-        @Override
         public void playSound() {
             try {
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sounds/sound.wav").getAbsoluteFile());
@@ -307,7 +306,6 @@ public class Game_3x3_AI extends JFrame implements ActionListener, GameInterface
             }
         }
 
-        @Override
         public void newGame(String win) {
             int res = JOptionPane.showConfirmDialog(
                     null,

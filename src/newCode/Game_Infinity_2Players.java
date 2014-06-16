@@ -14,7 +14,7 @@ import java.io.File;
 /**
  * Created by Darya on 6/10/14.
  */
-public class Game_Infinity_2Players extends JFrame implements ActionListener, GameInterface {
+public class Game_Infinity_2Players extends JFrame implements ActionListener {
     private JFrame mainFrame;
     private JButton backToMenuButton;
     private JButton newGameButton;
@@ -38,7 +38,6 @@ public class Game_Infinity_2Players extends JFrame implements ActionListener, Ga
         initGame();
     }
 
-    @Override
     public void initGame() {
         mainFrame = new JFrame("2 игрока");
         mainFrame.setSize(600, 500);
@@ -69,7 +68,7 @@ public class Game_Infinity_2Players extends JFrame implements ActionListener, Ga
         });
     }
 
-    private class GameImpl extends JFrame implements Game, ActionListener {
+    private class GameImpl extends JFrame implements ActionListener {
         public GameImpl() {
             JPanel centerPanel = new JPanel();
             centerPanel.setLayout(new GridLayout(SIZE, SIZE));
@@ -141,7 +140,6 @@ public class Game_Infinity_2Players extends JFrame implements ActionListener, Ga
             }
         }
 
-        @Override
         public String whoseTurn() {
             if (sounds != 0) {
                 playSound();
@@ -151,7 +149,7 @@ public class Game_Infinity_2Players extends JFrame implements ActionListener, Ga
             return flag ? "O" : "X";
         }
 
-        @Override
+//        @Override
         public String checkWin() {
             if (emptyCells == 0) {
                 return "XO";
@@ -162,7 +160,6 @@ public class Game_Infinity_2Players extends JFrame implements ActionListener, Ga
 //            }
         }
 
-        @Override
         public void playSound() {
             try {
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sounds/sound.wav").getAbsoluteFile());
@@ -183,7 +180,6 @@ public class Game_Infinity_2Players extends JFrame implements ActionListener, Ga
             }
         }
 
-        @Override
         public void newGame(String win) {
             int res = JOptionPane.showConfirmDialog(null,
                     win + "\nНачать новую игру ?",
