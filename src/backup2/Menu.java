@@ -57,8 +57,7 @@ public class Menu extends JFrame {
         buttonPanel.setLocation(500 / 2 - 113 / 2, 375 / 2 - 121 / 2);
         add(jLayeredPane);
 
-//        buttonPlay.addActionListener(getGame());
-        buttonPlay.addActionListener(new RunGame());
+        buttonPlay.addActionListener(getGame());
 
         buttonRule.addActionListener(new Rule());
 
@@ -72,40 +71,40 @@ public class Menu extends JFrame {
         });
     }
 
-//    private GameInterface getGame() {
-//        Properties prop = new Properties();
-//        try {
-//            prop.load(new InputStreamReader(new FileInputStream("config/settings.ini"), "UTF-8"));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        if (Integer.parseInt(prop.getProperty("game")) == 0) {
-//            if (Integer.parseInt(prop.getProperty("players")) == 1) {
-//                return new Game_3x3_AI(Integer.parseInt(prop.getProperty("sounds")));
-//            } else {
-//                return new Game_3x3_2Players(Integer.parseInt(prop.getProperty("sounds")));
-//            }
-//        } else {
-//            if (Integer.parseInt(prop.getProperty("players")) == 2) {
-//                return new Game_Infinity_2Players(Integer.parseInt(prop.getProperty("sounds")));
-//            }
-//        }
-//        return new Game_Infinity_2Players(Integer.parseInt(prop.getProperty("sounds")));
-//    }
-
-    private class RunGame implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Properties prop = new Properties();
-            try {
-                prop.load(new InputStreamReader(new FileInputStream("config/settings.ini"), "UTF-8"));
-            } catch (IOException ex) {
-                ex.printStackTrace();
+    private GameInterface getGame() {
+        Properties prop = new Properties();
+        try {
+            prop.load(new InputStreamReader(new FileInputStream("config/settings.ini"), "UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (Integer.parseInt(prop.getProperty("game")) == 0) {
+            if (Integer.parseInt(prop.getProperty("players")) == 1) {
+                return new Game_3x3_AI(Integer.parseInt(prop.getProperty("sounds")));
+            } else {
+                return new Game_3x3_2Players(Integer.parseInt(prop.getProperty("sounds")));
             }
-            if (Integer.parseInt(prop.getProperty("game")) == 0) { // 3x3
-//                new Game_3x3(Integer.parseInt(prop.getProperty("players")), Integer.parseInt(prop.getProperty("sounds")));
-            } else { // infinity
+        } else {
+            if (Integer.parseInt(prop.getProperty("players")) == 2) {
+                return new Game_Infinity_2Players(Integer.parseInt(prop.getProperty("sounds")));
             }
         }
+        return new Game_Infinity_2Players(Integer.parseInt(prop.getProperty("sounds")));
     }
+
+//    private class RunGame implements ActionListener {
+//        @Override
+//        public void actionPerformed(ActionEvent e) {
+//            Properties prop = new Properties();
+//            try {
+//                prop.load(new InputStreamReader(new FileInputStream("config/settings.ini"), "UTF-8"));
+//            } catch (IOException ex) {
+//                ex.printStackTrace();
+//            }
+//            if (Integer.parseInt(prop.getProperty("game")) == 0) { // 3x3
+//                new Game_3x3(Integer.parseInt(prop.getProperty("players")), Integer.parseInt(prop.getProperty("sounds")));
+//            } else { // infinity
+//            }
+//        }
+//    }
 }

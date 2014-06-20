@@ -28,7 +28,7 @@ public class GameFieldInfinity extends JFrame implements ActionListener {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 field[i][j] = new JButton("");
-//                field[i][j].setFont(new Font("Arial", Font.ITALIC, 5));
+                field[i][j].setFont(new Font(null, Font.ITALIC, 6));
                 field[i][j].addActionListener(this);
             }
         }
@@ -36,7 +36,7 @@ public class GameFieldInfinity extends JFrame implements ActionListener {
         initGame();
 
         setTitle(titlesJFrame[players - 1]);
-        setSize(600, 600);
+        setSize(600, 500);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -72,7 +72,7 @@ public class GameFieldInfinity extends JFrame implements ActionListener {
     }
 
     private Component createFieldPanel() {
-        JPanel fieldPanel = new JPanel(new GridLayout(SIZE, SIZE, 1, 1));
+        JPanel fieldPanel = new JPanel(new GridLayout(SIZE, SIZE, 0, 0));
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 fieldPanel.add(field[i][j]);
@@ -175,6 +175,17 @@ public class GameFieldInfinity extends JFrame implements ActionListener {
         infoLabel.setText(namesGameMode[players - 1][turnPlayer]);
     }
 
+    private static final int[][] DIST = new int[][] {
+            {-1, -1},
+            {-1,  0},
+            {-1,  1},
+            { 0, -1},
+            { 0,  1},
+            { 1, -1},
+            { 1,  0},
+            { 1,  1}
+    };
+
     public String checkWin(JButton[][] buttons) {
         int emptyCells = 0;
         char[][] p = new char[SIZE][SIZE];
@@ -188,20 +199,29 @@ public class GameFieldInfinity extends JFrame implements ActionListener {
                 }
             }
         }
-//        for (int i = 0; i < SIZE; i++) {
-//            if (p[i][0] != '\0' && p[i][0] == p[i][1] && p[i][0] == p[i][2]) {
-//                return getNameByChar(p[i][0]);
-//            }
-//            if (p[0][i] != '\0' && p[0][i] == p[1][i] && p[0][i] == p[2][i]) {
-//                return getNameByChar(p[0][i]);
-//            }
-//        }
-//        if (p[0][0] != '\0' && p[0][0] == p[1][1] && p[0][0] == p[2][2]) {
-//            return getNameByChar(p[0][0]);
-//        }
-//        if (p[0][2] != '\0' && p[0][2] == p[1][1] && p[0][2] == p[2][0]) {
-//            return getNameByChar(p[0][2]);
-//        }
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (p[i][j] == '\0') {
+                    continue;
+                }
+                for (int k = 0; k < 8; k++) {
+                    int x = i;
+                    int y = j;
+                    boolean fail = false;
+                    for (int s = 0; s < 4; s++) {
+                        x += DIST[k][0];
+                        y += DIST[k][1];
+                        if (x < 0 || y < 0 || x >= SIZE || y >= SIZE || p[i][j] != p[x][y]) {
+                            fail = true;
+                            break;
+                        }
+                    }
+                    if (!fail) {
+                        return getNameByChar(p[i][j]);
+                    }
+                }
+            }
+        }
         if (emptyCells == 0) {
             return getNameByChar('\0');
         }
