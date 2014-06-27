@@ -2,17 +2,19 @@ package main;
 
 import java.awt.*;
 import javax.swing.*;
-import java.io.IOException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Menu extends JFrame {
+    //размер окна меню
     public static final int WIDTH_WINDOW = 500;
     public static final int HEIGHT_WINDOW = 375;
 
+    //размер окна панели
     public static final int WIDTH_PANEL = 113;
     public static final int HEIGHT_PANEL = 121;
 
+    /**
+     * Конструктор, с помощью которого создается основное окно
+     */
     public Menu() {
         super("Крестики-нолики");
         setSize(WIDTH_WINDOW, HEIGHT_WINDOW);

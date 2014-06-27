@@ -6,14 +6,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Game extends JFrame {
-    public static final int WIDTH_WINDOW_1 = 300;  //
-    public static final int HEIGHT_WINDOW_1 = 350; // for field 3x3
+    //Размер окна для игры 3х3
+    public static final int WIDTH_WINDOW_1 = 390;
+    public static final int HEIGHT_WINDOW_1 = 410;
 
-    public static final int WIDTH_WINDOW_2 = 450;  //
-    public static final int HEIGHT_WINDOW_2 = 500; // for field 20x20
+    //Размер окна для игры 20х20
+    public static final int WIDTH_WINDOW_2 = 450;
+    public static final int HEIGHT_WINDOW_2 = 500;
 
-    public static final String[][] gameTurns = new String[][] {
-            {"игрок", "компьютер"},
+    public static final String[][] gameTurns = new String[][]{
+            {"игрок", "бот"},
             {"игрок 1", "игрок 2"},
     };
 
@@ -25,7 +27,7 @@ public class Game extends JFrame {
     public final Image imgNought;
 
     private int[][] field;
-    private int turnPlayer;
+    private int turnPlayer; // = 0 - ход крестиков, 1 - ход ноликов
     private JLabel turnInfo;
     private JLabel numberOfWinsFirstPlayer;
     private JLabel numberOfWinsSecondPlayer;
@@ -34,9 +36,14 @@ public class Game extends JFrame {
     private AISmall aiSmall;
     private AIBig aiBig;
 
+    /**
+     * @param size    размер поля
+     * @param players число игроков
+     */
     public Game(int size, int players) {
         this.size = size;
         this.players = players;
+
         turnPlayer = 0;
         field = new int[size][size];
         player1 = gameTurns[players - 1][0];
@@ -67,6 +74,9 @@ public class Game extends JFrame {
         add(infoPanel(), BorderLayout.SOUTH);
     }
 
+    /**
+     * Устанавливает на infoPanel чей ход, очищает игровое поле
+     */
     private void initGame() {
         turnPlayer = 0;
         turnInfo.setText((numberOfMatches % 2 == 0) ? player1 : player2);
@@ -79,11 +89,15 @@ public class Game extends JFrame {
                 CellsPanel cell = (CellsPanel) cellsPanel[i][j];
                 cell.setImg(null);
                 cell.repaint();
-                cell.setEnabled(true);
             }
         }
     }
 
+    /**
+     * Создает панель с информацией о ходе соперника
+     *
+     * @return infoPanel
+     */
     private Component infoPanel() {
         JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         infoPanel.add(new JLabel("Ходит: "));
@@ -91,6 +105,11 @@ public class Game extends JFrame {
         return infoPanel;
     }
 
+    /**
+     * Создает панель с панелями
+     *
+     * @return fieldPanel
+     */
     private Component fieldPanel() {
         JPanel fieldPanel = new JPanel(new GridLayout(size, size));
         for (int i = 0; i < size; i++) {
@@ -103,18 +122,24 @@ public class Game extends JFrame {
         return fieldPanel;
     }
 
+    /**
+     * Создает панель с кнопками "Новая игра", "Очистить статистику", "Закончить игру", а также информацией о количестве
+     * побед пользователей/бота
+     *
+     * @return buttonsPanel
+     */
     private Component buttonsPanel() {
         JPanel buttonsPanel = new JPanel(new GridLayout(3, 2, 3, 3));
 
-        JPanel firstPlayerPanel = new JPanel(new FlowLayout());
+        JPanel firstPlayerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         firstPlayerPanel.add(new JLabel(player1 + ": "));
         firstPlayerPanel.add(numberOfWinsFirstPlayer);
-        firstPlayerPanel.add(new JLabel(" побед"));
+        firstPlayerPanel.add(new JLabel(" победа(ы)"));
 
-        JPanel secondPlayerPanel = new JPanel(new FlowLayout());
+        JPanel secondPlayerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         secondPlayerPanel.add(new JLabel(player2 + ": "));
         secondPlayerPanel.add(numberOfWinsSecondPlayer);
-        secondPlayerPanel.add(new JLabel(" побед"));
+        secondPlayerPanel.add(new JLabel(" победа(ы)"));
 
         JButton clearFieldButton = new JButton("Новая игра");
         JButton clearStatisticButton = new JButton("Очистить статискику");
@@ -145,10 +170,16 @@ public class Game extends JFrame {
         return buttonsPanel;
     }
 
+    /**
+     * @return имя игрока, чей ход
+     */
     public int whoseTurn() {
         return turnPlayer;
     }
 
+    /**
+     * Меняет текст внутри turnInfo, вызывает бота
+     */
     public void wasTurn() {
         turnPlayer = 1 - turnPlayer;
         turnInfo.setText(turnPlayer == 0 ? player1 : player2);
@@ -162,18 +193,39 @@ public class Game extends JFrame {
         }
     }
 
+    /**
+     * Обновляет значение переменной field[x][y]
+     *
+     * @param x координата
+     * @param y координата
+     * @param z значение переменной field[x][y]. Может быть = 0 - ячейка пуста, 1 - в ячейке Х, 2 - в ячейке О
+     */
     public void updateField(int x, int y, int z) {
         field[x][y] = z;
     }
 
+    /**
+     * @return матрицу field
+     */
     public int[][] getField() {
         return field;
     }
 
+    /**
+     * @param x координата панели
+     * @param y координата панели
+     * @return панель с заданными координатами
+     */
     public CellsPanel getCell(int x, int y) {
         return (CellsPanel) cellsPanel[x][y];
     }
 
+    /**
+     * @param winner -1, если ничья,
+     *               0, если еще есть свободные ячейки и никто не выиграл
+     *               1 или 2, если кто-то выиграл
+     * @return true, если есть победитель/ничья, иначе false
+     */
     private boolean showWinnerMessage(int winner) {
         if (winner == 0) {
             return false;
@@ -186,7 +238,7 @@ public class Game extends JFrame {
             winner = (winner % 2) + 1;
         }
         if (winner > 0) {
-            text = "Выйграл " + gameTurns[players - 1][winner - 1];
+            text = "Выиграл " + gameTurns[players - 1][winner - 1];
             updateStatistic(winner);
         }
         JOptionPane.showOptionDialog(null,
@@ -195,13 +247,18 @@ public class Game extends JFrame {
                 JOptionPane.OK_OPTION,
                 JOptionPane.INFORMATION_MESSAGE,
                 null,
-                new Object[] {"Хорошо"},
+                new Object[]{"Хорошо"},
                 null);
         numberOfMatches += 1;
         initGame();
         return true;
     }
 
+    /**
+     * Если есть победа, то обновляет статистику
+     *
+     * @param winner
+     */
     private void updateStatistic(int winner) {
         if (winner == 1) {
             numberOfWinsFirstPlayer.setText(String.valueOf(Integer.parseInt(numberOfWinsFirstPlayer.getText()) + 1));
@@ -210,17 +267,26 @@ public class Game extends JFrame {
         }
     }
 
-    public static final int[][] CARDINAL = new int[][] {
+    //координаты прилегающих клеток к данной
+    public static final int[][] CARDINAL = new int[][]{
             {-1, -1},
-            {-1,  0},
-            {-1,  1},
-            { 0, -1},
-            { 0,  1},
-            { 1, -1},
-            { 1,  0},
-            { 1,  1}
+            {-1, 0},
+            {-1, 1},
+            {0, -1},
+            {0, 1},
+            {1, -1},
+            {1, 0},
+            {1, 1}
     };
 
+    /**
+     * Проходит по массиву field и считает количество свободных клеток, затем исследуются все прилегающие к данной
+     * клетке ячейки
+     *
+     * @return -1, если ничья,
+     * 0, если никто не выиграл
+     * иначе, значение field[i][j]
+     */
     private int checkWinBig() {
         int emptyCells = 0;
         for (int i = 0; i < size; i++) {
@@ -259,6 +325,13 @@ public class Game extends JFrame {
         return 0;
     }
 
+    /**
+     * Проходит по массиву field и считает количество свободных клеток, затем исследуются возможные выигрышные варианты
+     *
+     * @return -1, если ничья,
+     * 0, если никто не выиграл
+     * иначе, значение field[i][j]
+     */
     private int checkWinSmall() {
         int emptyCells = 0;
         for (int i = 0; i < size; i++) {

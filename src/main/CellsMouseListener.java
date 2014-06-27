@@ -2,20 +2,23 @@ package main;
 
 import javafx.util.Pair;
 
-import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class CellsMouseListener extends MouseAdapter {
     private CellsPanel cell;
     private Game game;
 
-    public CellsMouseListener(Game gameFrame, CellsPanel cell) {
+    public CellsMouseListener(Game game, CellsPanel cell) {
         this.cell = cell;
-        this.game = gameFrame;
+        this.game = game;
     }
 
+    /**
+     * В пустую клетку вставляет определенную картинку, вызывает методы updateField и wasTurn
+     *
+     * @param e
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         if (cell.getImg() != null) {

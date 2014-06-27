@@ -5,6 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Rule implements ActionListener {
+    /**
+     * При вызове выводятся правила игры
+     *
+     * @param e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String rule = "Реальное поле имеет размер 20*20 клеток, но для игры\n" +

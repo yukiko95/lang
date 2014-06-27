@@ -11,16 +11,21 @@ public class Exit implements ActionListener {
         this.menuFrame = menuFrame;
     }
 
+    /**
+     * Вызывает JOptionPane с подтверждением выхода
+     *
+     * @param e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         int res = JOptionPane.showOptionDialog(
                 null,
-                "Вы уверены, что хотите выйти ?",
+                "Вы уверены, что хотите выйти?",
                 "Выход",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
-                new Object[] {"Да", "Нет"},
+                new Object[]{"Да", "Нет"},
                 null);
 
         if (res == JOptionPane.YES_OPTION) {

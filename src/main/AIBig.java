@@ -6,15 +6,16 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class AIBig {
-    public static final int[][] CARDINAL = new int[][] {
+    //координаты прилегающих клеток к данной
+    public static final int[][] CARDINAL = new int[][]{
             {-1, -1},
-            {-1,  0},
-            {-1,  1},
-            { 0, -1},
-            { 0,  1},
-            { 1, -1},
-            { 1,  0},
-            { 1,  1}
+            {-1, 0},
+            {-1, 1},
+            {0, -1},
+            {0, 1},
+            {1, -1},
+            {1, 0},
+            {1, 1}
     };
     private static final int NUMBER_OF_ATTEMPTS = 113121;
 
@@ -27,6 +28,12 @@ public class AIBig {
         this.size = TicTacToeMain.SIZE_INFINITY_FIELD;
     }
 
+    /**
+     * С помощью метода whoseTurn узнает, какую картинку необходимо вставить на панель
+     *
+     * @param x координата панели
+     * @param y координата панели
+     */
     public void move(int x, int y) {
         CellsPanel cell = game.getCell(x, y);
         cell.setImg(game.whoseTurn() == 0 ? game.imgCross : game.imgNought);
@@ -36,6 +43,9 @@ public class AIBig {
         game.wasTurn();
     }
 
+    /**
+     * Проверяет наличие выигрышный позиций, а также позициий, которые принесут поражение
+     */
     public void makeMove() {
         field = game.getField();
         ArrayList<Pair<Integer, Integer>> playerCoordsThreeInRow = threeInRow(1);
@@ -64,7 +74,7 @@ public class AIBig {
             return;
         }
 
-        // если имеем 3 в ряд и есть место для 4го и для 5го
+        //Если имеем 3 в ряд и есть место для 4го и для 5го
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (field[i][j] != 0) {
@@ -83,7 +93,7 @@ public class AIBig {
             }
         }
 
-        // если имеем 2 в ряд и есть место для 3го, 4го и для 5го
+        //Если имеем 2 в ряд и есть место для 3го, 4го и для 5го
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (field[i][j] != 0) {
@@ -119,19 +129,17 @@ public class AIBig {
             move(averageRandomCoords.getKey(), averageRandomCoords.getValue());
             return;
         }
-        sumX = 0;
-        sumY = 0;
-        cntSum = 0;
+        loop:
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (field[i][j] == 1) {
-                    sumX += i;
-                    sumY += j;
-                    cntSum += 1;
+                    sumX = i;
+                    sumY = j;
+                    break loop;
                 }
             }
         }
-        Pair<Integer, Integer> averageRandomCoords = findAverageRandomCoords(sumX / cntSum, sumY / cntSum);
+        Pair<Integer, Integer> averageRandomCoords = findAverageRandomCoords(sumX, sumY);
         move(averageRandomCoords.getKey(), averageRandomCoords.getValue());
     }
 
@@ -188,9 +196,9 @@ public class AIBig {
                 for (int k = 0; k < 8; k++) {
                     ArrayList<Pair<Integer, Integer>> coords = getCoords(i, j, k);
                     if (coords != null && field[coords.get(1).getKey()][coords.get(1).getValue()] == player &&
-                                          field[coords.get(2).getKey()][coords.get(2).getValue()] == player &&
-                                          field[coords.get(3).getKey()][coords.get(3).getValue()] == player &&
-                                          field[coords.get(4).getKey()][coords.get(4).getValue()] == 0) {
+                            field[coords.get(2).getKey()][coords.get(2).getValue()] == player &&
+                            field[coords.get(3).getKey()][coords.get(3).getValue()] == player &&
+                            field[coords.get(4).getKey()][coords.get(4).getValue()] == 0) {
                         return coords;
                     }
                 }
@@ -208,9 +216,9 @@ public class AIBig {
                 for (int k = 0; k < 8; k++) {
                     ArrayList<Pair<Integer, Integer>> coords = getCoords(i, j, k);
                     if (coords != null && field[coords.get(1).getKey()][coords.get(1).getValue()] == player &&
-                                          field[coords.get(2).getKey()][coords.get(2).getValue()] == player &&
-                                          field[coords.get(3).getKey()][coords.get(3).getValue()] == player &&
-                                          field[coords.get(4).getKey()][coords.get(4).getValue()] == player) {
+                            field[coords.get(2).getKey()][coords.get(2).getValue()] == player &&
+                            field[coords.get(3).getKey()][coords.get(3).getValue()] == player &&
+                            field[coords.get(4).getKey()][coords.get(4).getValue()] == player) {
                         return coords;
                     }
                 }

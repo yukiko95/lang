@@ -9,22 +9,27 @@ import java.io.*;
 import java.util.Properties;
 
 public class Settings extends JFrame implements ActionListener {
-    private JFrame menuFrame;
-    private int game = 0;
-    private int players = 1;
+    private final JFrame menuFrame;
+    private int game = 0; //Начальное значение переменной 0 - игра 3х3
+    private int players = 1; //Начальное значение переменной 1 - игра с компьютером
     private Properties prop;
 
-    public Settings(JFrame menuFrame) {
+    public Settings(final JFrame menuFrame) {
         this.menuFrame = menuFrame;
     }
 
+    /**
+     * При вызове Settings создается окно, в котором можно изменить параметры игры
+     *
+     * @param e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         setSize(200, 300);
         setTitle("Настройки");
         setResizable(false);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
         prop = new Properties();
@@ -41,12 +46,17 @@ public class Settings extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    /**
+     * Создает панель с 2 кнопками ("Ок" и "Отмена")
+     *
+     * @return панель с кнопками "Ок" и "Отмена"
+     */
     private Component createButtonsPanel() {
         JPanel buttonsOkCancelPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton okButton = new JButton("OK");
         JButton cancelButton = new JButton("Отмена");
-        buttonsOkCancelPanel.add(cancelButton);
         buttonsOkCancelPanel.add(okButton);
+        buttonsOkCancelPanel.add(cancelButton);
 
         okButton.addActionListener(new ActionListener() {
             @Override
@@ -66,21 +76,25 @@ public class Settings extends JFrame implements ActionListener {
         return buttonsOkCancelPanel;
     }
 
+    /**
+     * @return панель с настройками
+     */
     private Component createMainPanel() {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        // second panel
-        JPanel secondPanel = new JPanel();
-        secondPanel.setLayout(new BoxLayout(secondPanel, BoxLayout.Y_AXIS));
+        JPanel firstPanel = new JPanel(); //панель с флажками для выбора поля
+        firstPanel.setLayout(new BoxLayout(firstPanel, BoxLayout.Y_AXIS));
         TitledBorder sizeTitle = new TitledBorder("Размер поля");
-        secondPanel.setBorder(sizeTitle);
+        firstPanel.setBorder(sizeTitle);
 
         ButtonGroup bG1 = new ButtonGroup();
         JRadioButton rButtonGame1 = new JRadioButton("3*3");
         JRadioButton rButtonGame2 = new JRadioButton("Бесконечное поле");
         bG1.add(rButtonGame1);
         bG1.add(rButtonGame2);
+
+        //считываем данные из файла и выбираем соответствующим образом настройки
         if (Integer.valueOf(prop.getProperty("game")) == 0) {
             rButtonGame1.setSelected(true);
             rButtonGame2.setSelected(false);
@@ -88,15 +102,14 @@ public class Settings extends JFrame implements ActionListener {
             rButtonGame1.setSelected(false);
             rButtonGame2.setSelected(true);
         }
-        secondPanel.add(rButtonGame1);
-        secondPanel.add(rButtonGame2);
+        firstPanel.add(rButtonGame1);
+        firstPanel.add(rButtonGame2);
 
-        // third panel
-        JPanel thirdPanel = new JPanel();
-        thirdPanel.setLayout(new BoxLayout(thirdPanel, BoxLayout.Y_AXIS));
+        JPanel secondPanel = new JPanel(); //панель с флажками для выбора количества игроков
+        secondPanel.setLayout(new BoxLayout(secondPanel, BoxLayout.Y_AXIS));
 
         TitledBorder gameModeTitle = new TitledBorder("Режим игры");
-        thirdPanel.setBorder(gameModeTitle);
+        secondPanel.setBorder(gameModeTitle);
 
         ButtonGroup bG2 = new ButtonGroup();
         JRadioButton rButtonPlayer1 = new JRadioButton("C компьютером");
@@ -104,6 +117,7 @@ public class Settings extends JFrame implements ActionListener {
         bG2.add(rButtonPlayer1);
         bG2.add(rButtonPlayer2);
 
+        //считываем данные из файла и выбираем соответствующим образом настройки
         if (Integer.valueOf(prop.getProperty("players")) == 1) {
             rButtonPlayer1.setSelected(true);
             rButtonPlayer2.setSelected(false);
@@ -111,8 +125,8 @@ public class Settings extends JFrame implements ActionListener {
             rButtonPlayer1.setSelected(false);
             rButtonPlayer2.setSelected(true);
         }
-        thirdPanel.add(rButtonPlayer1);
-        thirdPanel.add(rButtonPlayer2);
+        secondPanel.add(rButtonPlayer1);
+        secondPanel.add(rButtonPlayer2);
 
         rButtonGame1.addActionListener(new ActionListener() {
             @Override
@@ -142,12 +156,18 @@ public class Settings extends JFrame implements ActionListener {
             }
         });
 
-        // mainPanel
+
+        mainPanel.add(firstPanel);
         mainPanel.add(secondPanel);
-        mainPanel.add(thirdPanel);
         return mainPanel;
     }
 
+    /**
+     * Записывает настройки в файл
+     *
+     * @param game    = 0, если игра 3х3, 1 - игра 20х20(эквивалент бесконечной)
+     * @param players = 1, если игра против компьютера, = 2, если играют двое человек
+     */
     private void setSettings(final int game, final int players) {
         Properties prop = new Properties();
         try {
