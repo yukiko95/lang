@@ -1,7 +1,6 @@
 package main;
 
-import javafx.util.Pair;
-
+import javafx.util.*;
 import java.util.ArrayList;
 import java.util.Random;
 

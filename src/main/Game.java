@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Game extends JFrame {
     //Размер окна для игры 3х3
@@ -19,6 +21,7 @@ public class Game extends JFrame {
             {"игрок 1", "игрок 2"},
     };
 
+    private final JFrame menuFrame;
     public final int size;
     public final int players;
     public final String player1;
@@ -40,7 +43,8 @@ public class Game extends JFrame {
      * @param size    размер поля
      * @param players число игроков
      */
-    public Game(int size, int players) {
+    public Game(final JFrame menuFrame, final int size, final int players) {
+        this.menuFrame=menuFrame;
         this.size = size;
         this.players = players;
 
@@ -72,6 +76,23 @@ public class Game extends JFrame {
         add(buttonsPanel(), BorderLayout.NORTH);
         add(fieldPanel(), BorderLayout.CENTER);
         add(infoPanel(), BorderLayout.SOUTH);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                menuFrame.setEnabled(false);
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                menuFrame.setEnabled(true);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                menuFrame.setEnabled(true);
+            }
+        });
     }
 
     /**
